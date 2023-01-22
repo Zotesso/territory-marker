@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react";
 import Map from "../../components/Map/Map";
-import { MapType } from "../../shared/models/map.model";
+import { TerritoryType } from "../../shared/models/map.model";
 
 const Home = () => {
-  const [mapDetails, setmapDetails] = useState<MapType>({
-    id: 0,
-    last_given_date: "",
-    last_worked_date: "",
-    name: "",
-    polylines: [],
-  });
+  const [mapDetails, setmapDetails] = useState<TerritoryType[]>([]);
 
   useEffect(() => {
-    fetch("https://419qbp2aef.execute-api.us-east-1.amazonaws.com/dev/territory-list")
+    fetch(
+      "https://419qbp2aef.execute-api.us-east-1.amazonaws.com/dev/territory-list"
+    )
       .then((response) => response.json())
       .then((mapsItems) => {
-        console.log(mapsItems[0]);
-        mapsItems[0].polylines = JSON.parse(mapsItems[0].polylines);
-        console.log(mapsItems[0]);
-        setmapDetails(mapsItems[0]);
+        mapsItems.forEach((item: any) => {
+          item.polylines = JSON.parse(item.polylines).polylines;
+        });
+        setmapDetails(mapsItems);
       })
       .catch((err) => {
         console.log(err.message);
@@ -33,7 +29,7 @@ const Home = () => {
       </div>
       <div className="">
         <div className="">
-          <Map map={mapDetails} />
+          <Map territories={mapDetails} />
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 export interface MapProps {
-  map: MapType
+  territories: TerritoryType[]
 }
 
-export type MapType = {
+export type TerritoryType = {
   id: number;
   name: string;
   polylines: {lat: number, lng: number}[][];

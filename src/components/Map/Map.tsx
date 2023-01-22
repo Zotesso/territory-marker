@@ -1,9 +1,8 @@
 import { FC } from "react";
-import { MapContainer, GeoJSON, TileLayer, Polyline, Rectangle, LayerGroup, FeatureGroup } from "react-leaflet";
-import territorymock from '../../mocks/territory-mock.json';
+import { MapContainer, TileLayer, Polyline, FeatureGroup } from "react-leaflet";
 import { MapProps } from "../../shared/models/map.model";
 
-const Map: FC<MapProps> = ({map}): JSX.Element => {
+const Map: FC<MapProps> = ({territories}): JSX.Element => {
   const mapStyle = {
     height: "100vh",
     width: "100%",
@@ -24,9 +23,17 @@ const Map: FC<MapProps> = ({map}): JSX.Element => {
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
         url="https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=LGVj4QkGZ2R9iATEwUVu"
       />
-    <FeatureGroup pathOptions={{color: 'lime', fill: true, fillColor: 'lime'}}>
-    <Polyline pathOptions={blackOptions} positions={map.polylines} />
-    </FeatureGroup>
+      <FeatureGroup
+        pathOptions={{ color: "lime", fill: true, fillColor: "lime" }}
+      >
+        {territories.map((territory) => (
+          <Polyline
+            pathOptions={blackOptions}
+            positions={territory.polylines}
+            key={territory.id}
+          />
+        ))}
+      </FeatureGroup>
     </MapContainer>
   );
 };

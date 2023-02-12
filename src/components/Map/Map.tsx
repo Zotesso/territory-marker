@@ -1,18 +1,31 @@
 import { FC, useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polyline, FeatureGroup } from "react-leaflet";
 import { MapProps, TerritoryType } from "../../shared/models/map.model";
+import { daysDiff } from "../../shared/utils/date.util";
 
 const Map: FC<MapProps> = ({territories}): JSX.Element => {
-  useEffect(() => {
-    console.log('entrou aq');
-  }, [territories]);
+  const colorOptions = [
+    {minRange: 1, maxRange: 15, color: '#c83b59'},
+    {minRange: 16, maxRange: 30, color: '#f1696e'},
+    {minRange: 31, maxRange: 45, color: '#c5dc7a'},
+    {minRange: 46, maxRange: 60, color: '#50c2bd'},
+  ]
 
   const setColor = (territory: TerritoryType): {color: string, fill: boolean, fillColor: string} => {
+    const colorSettings = {color: 'gray', fill: true, fillColor: 'gray'};
+
     if (territory.last_worked_date) {
-      console.log('teste')
+      const daysPassed = daysDiff(new Date(), new Date(territory.last_worked_date));
+    
+      colorOptions.forEach(option => {
+        if (daysPassed < option.minRange || daysPassed > option.maxRange) return;
+
+        colorSettings.color = option.color;
+        colorSettings.fillColor = option.color;
+      })
     }
-    console.log(territory);
-    return { color: "gray", fill: true, fillColor: "gray"}
+
+    return colorSettings
   };
 
   const mapStyle = {
@@ -34,20 +47,17 @@ const Map: FC<MapProps> = ({territories}): JSX.Element => {
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
         url="https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=LGVj4QkGZ2R9iATEwUVu"
       />
-              {territories.map((territory) => (
-
-      <FeatureGroup
-        pathOptions={setColor(territory)}
-        key={territory.id}
-      >
+      {territories.map((territory) => (
+        <FeatureGroup
+          pathOptions={setColor(territory)}
+          key={territory.id}
+        >
           <Polyline
-            pathOptions={setColor(territory)}
             positions={territory.polylines}
             key={territory.id}
           />
-      </FeatureGroup>
-              ))}
-
+        </FeatureGroup>
+      ))}
     </MapContainer>
   );
 };

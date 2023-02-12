@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import FloatActionButton from "../../components/FloatActionButton/FloatActionButton";
 import Map from "../../components/Map/Map";
 import { TerritoryType } from "../../shared/models/map.model";
 
@@ -27,10 +28,11 @@ const Home = () => {
         <h2 className="heading">Território</h2>
         <p className="text-muted">Descrição</p>
       </div>
-      <div className="">
-        <div className="">
+      <div className="body">
+        <div className="map">
           <Map territories={mapDetails} />
         </div>
+        <FloatActionButton />
       </div>
     </div>
   );

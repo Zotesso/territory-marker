@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polyline, FeatureGroup } from "react-leaflet";
+import { FC } from "react";
+import { MapContainer, TileLayer, Polyline, FeatureGroup, Tooltip } from "react-leaflet";
 import { MapProps, TerritoryType } from "../../shared/models/map.model";
 import { daysDiff } from "../../shared/utils/date.util";
 
@@ -12,7 +12,12 @@ const Map: FC<MapProps> = ({territories}): JSX.Element => {
   ]
 
   const setColor = (territory: TerritoryType): {color: string, fill: boolean, fillColor: string} => {
-    const colorSettings = {color: 'gray', fill: true, fillColor: 'gray'};
+    const colorSettings = {color: 'white', fill: true, fillColor: 'white'};
+    if (territory.last_given_date && new Date(territory.last_given_date) > new Date(territory.last_worked_date)) {
+      colorSettings.color = 'black';
+      colorSettings.fillColor = 'black';
+      return colorSettings;
+    }
 
     if (territory.last_worked_date) {
       const daysPassed = daysDiff(new Date(), new Date(territory.last_worked_date));
@@ -56,6 +61,9 @@ const Map: FC<MapProps> = ({territories}): JSX.Element => {
             positions={territory.polylines}
             key={territory.id}
           />
+          <Tooltip direction="left" offset={[0, 0]} opacity={1} permanent>
+            { territory.name } - { territory.id }
+          </Tooltip>
         </FeatureGroup>
       ))}
     </MapContainer>

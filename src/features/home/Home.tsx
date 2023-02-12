@@ -7,7 +7,7 @@ const Home = () => {
 
   useEffect(() => {
     fetch(
-      "https://419qbp2aef.execute-api.us-east-1.amazonaws.com/dev/territory-list"
+      "https://419qbp2aef.execute-api.us-east-1.amazonaws.com/dev/territory/list"
     )
       .then((response) => response.json())
       .then((mapsItems) => {

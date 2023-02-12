@@ -1,8 +1,20 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polyline, FeatureGroup } from "react-leaflet";
-import { MapProps } from "../../shared/models/map.model";
+import { MapProps, TerritoryType } from "../../shared/models/map.model";
 
 const Map: FC<MapProps> = ({territories}): JSX.Element => {
+  useEffect(() => {
+    console.log('entrou aq');
+  }, [territories]);
+
+  const setColor = (territory: TerritoryType): {color: string, fill: boolean, fillColor: string} => {
+    if (territory.last_worked_date) {
+      console.log('teste')
+    }
+    console.log(territory);
+    return { color: "gray", fill: true, fillColor: "gray"}
+  };
+
   const mapStyle = {
     height: "100vh",
     width: "100%",
@@ -10,7 +22,6 @@ const Map: FC<MapProps> = ({territories}): JSX.Element => {
   };
 
   const position = { lat: -21.9471221, lng: -48.0065983 };
-  const blackOptions = { color: 'lime' }
 
   return (
     <MapContainer
@@ -23,17 +34,20 @@ const Map: FC<MapProps> = ({territories}): JSX.Element => {
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
         url="https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=LGVj4QkGZ2R9iATEwUVu"
       />
+              {territories.map((territory) => (
+
       <FeatureGroup
-        pathOptions={{ color: "lime", fill: true, fillColor: "lime" }}
+        pathOptions={setColor(territory)}
+        key={territory.id}
       >
-        {territories.map((territory) => (
           <Polyline
-            pathOptions={blackOptions}
+            pathOptions={setColor(territory)}
             positions={territory.polylines}
             key={territory.id}
           />
-        ))}
       </FeatureGroup>
+              ))}
+
     </MapContainer>
   );
 };

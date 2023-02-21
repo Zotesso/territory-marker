@@ -1,10 +1,20 @@
+import { FC } from 'react';
 import './styles.css';
 
-const FloatActionButton = (): JSX.Element => {
+export interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, React.AriaAttributes  {}
+
+const FloatActionButton: FC<ButtonProps> = (props): JSX.Element => {
+  const {children, ...rest} = props;
+
   return (
-    <div className="floating-container">
-      <div className="floating-button">+</div>
-    </div>
+    <button {...rest} >
+      <div className="floating-container">
+        <div className="floating-button">
+          +
+        {children}
+        </div>
+      </div>
+    </button>
   );
 };
 

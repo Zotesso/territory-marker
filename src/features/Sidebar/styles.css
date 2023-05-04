@@ -79,7 +79,7 @@
 }
 
 /* Sidebar Components */
-.sidebar-menu button {
+.sidebar-menu .close-button {
   width: 40px;
   height: 40px;
   margin-left: auto;

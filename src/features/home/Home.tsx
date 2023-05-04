@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import FloatActionButton from "../../components/FloatActionButton/FloatActionButton";
 import Map from "../../components/Map/Map";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../../features/Sidebar/Sidebar";
 import { TerritoryType } from "../../shared/models/map.model";
 import { LIST_TERRITORY_CACHE } from "../../shared/utils/app-constants";
 
